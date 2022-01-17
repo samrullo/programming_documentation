@@ -160,3 +160,33 @@ https://sv443.net/jokeapi/v2/joke/Programming?contains=debugging
 }
 ```
 
+When the API is used by large number of users the developers have to start thinking about limiting number of accesses to prevent the server from crashing or getting slow. To identify the developer using the API and to track how many times the developer is using the API, API provider issues identifier called API key, or API token. Later API provider can use this API key to charge developer or the users of the API.
+
+```https://samples.openweathermap.org/data/2.5/weather?q=London,uk&appid=<API key>```
+
+```Postman for Mac``` which can be downloaded from ```postman.com/downloads`` helps to ease interaction with APIs
+
+JSON (Javascript Object Notation) is slightly different from javascript objects, although they are very similar. In JSONs usually both keys and values are wrapped in quotations.
+
+```JSON Viewer Awesome``` chrome extension helps to visualize API JSON responses in pretty format.
+
+### How to get request to external server node
+
+We can use ```https``` module to make requests to external servers hosting APIs
+
+```javascript
+const https = require("https");
+
+https.get(url,(api_response)=>{
+  api_response.on("data",(api_data)=>{
+    const weatherData = JSON.parse(api_data);
+    console.log(weatherData);
+    
+    const temp = weatherData.main.temp;
+    const weatherDesc = weatherData.weather[0].description;
+    
+    console.log("temperature is "+temp)
+  })
+})
+```
+

@@ -244,6 +244,193 @@ docker exec <container id> node dbSeeder.js
 
 ## Container Networks
 
+When you have lots of containers running on docker host, you will start to want to split them into isolated groups. These isolated groups are called ```Bridge Networks```
+
+- Create custom bridge network
+- Run containers in the Network, i.e. when you run a container you also specify the bridge network in which it will run. It is possible for a container to run in multiple networks, which will allow it to talk to containers running in different networks.
+
+1. Create custom bridge network
+
+```bash
+docker network create --driver bridge isolated_network
+```
+
+2. Run a container in the network
+
+```bash
+docker run -d --net=isolated_network --name mongodb mongo
+```
+
+Now a web container running in ```isolated_network``` can connect to mongodb by its name.
+
+You can list bridge networks as below
+
+```bash
+docker network ls
+```
+
+You can also inspect a bridge network, which will print out information such as containers running in that bridge
+
+```bash
+docker network inspect isolated_network
+```
+
+## Docker compose
+
+Docker compose manages your application lifecycle
+
+- Start, stop and rebuild services, which are containers, but in the world of docker compose they are called services
+- View the status of running services
+- Stream the log output of running services
+- Run a one-off command on a service
+
+Suppose your whole application consists of nginx, node, mongodb, reds servers. Your nginx talks to multiple node servers, while each of those talk to mongodb and they also store some data in redis.
+
+```docker-compose.yml``` file allows to define all those containers and also define their relationship as well.
+
+### Docker compose workflow
+
+1. Build Services : similar to building images
+2. Start up services : similar to docker run container
+3. When we are done tear down those services : stop the containers or remove them
+
+docker-compose.yml file
+
+As stated above, in docker-compose.yml we define various services, their configurations. On its own the file is not much useful. But we can use it with ```docker compose build``` to build images.
+
+```yaml
+version:"3.x"
+services:
+	#nginx
+	#node
+	#mongodb
+```
+
+Key service configuration options
+
+- version : yaml file version, must be supported version such as 3.4
+- build : like building images
+- environment : setting environmetn variables used by a service
+- image : just specify images as a service
+- networks : specify networks in which our services will run in
+- ports : expose ports
+- volumes : define volumes
+
+In below example we are defining node and mongodb services
+
+1. node is the name of the service. We want to build it from a ```node.dockerfile``` and the image is build from the current folder, which is specified by ```context``` The service will run in the network called ```nodeapp-network```
+2. mongodb service is not built, but rather runs from an image ```mongo``` and it will also run in the network ```nodeapp-network```
+3. Finally we define networks. You can define multiple networks.
+
+```yaml
+version:"3.4"
+service:
+  node:
+    build:
+      context: .
+      dockerfile: node.dockerfile
+    networks:
+      -nodeapp-network
+  
+  mongodb:
+    image:mongo
+    networks:
+      -nodeapp-network
+  
+  networks:
+    nodeapp-network:
+      driver:bridge
+```
+
+Once we have our ```docker-compose.yml``` file we can run following commands from the directory where yaml file is located to manage our application lifecycle
+
+1. We build our services by running
+
+```bash
+docker-compose build
+```
+
+2. Then you can start those services
+
+```bash
+docker-compose up
+```
+
+3. To stop the services
+
+```bash
+docker-compose down
+```
+
+To view logs
+
+```bash
+docker-compose logs
+```
+
+To view running containers
+
+```bash
+docker-compose ps
+```
+
+We can start, stop, remove certain containers
+
+```bash
+docker-compose start ...
+docker-compose stop ...
+docker-compose rm ...
+```
+
+**Docker compose build**
+
+You can build all your services defined in ```docker-compose.yml```
+
+```bash
+docker-compose build
+```
+
+You can build specific services only
+
+```bash
+docker-compose build mongo
+```
+
+We can create and start services with docker-compose up. But we can also create and start specific services.
+
+In below example, we start only ```node``` service and we are telling not to re-create or re-build any of its dependencies, such as mongodb
+
+```bash
+docker-compose up --no-deps node
+```
+
+Docker compose down stops the services and also removes containers
+
+```bash
+docker-compose down
+```
+
+If you want to stop services, and remove containers, images and volumes
+
+```bash
+docker-compose down --rmi all --volumes
+```
+
+
+
 # Some issues
 
-When you run ```docker build``` without excluding ```node_modules``` you will face errors due to node modules having different binaries for different OS. Therefore, always indclude ```node_modules``` in your ```.dockerignore``` file
+- When you run ```docker build``` without excluding ```node_modules``` you will face errors due to node modules having different binaries for different OS. Therefore, always indclude ```node_modules``` in your ```.dockerignore``` file
+- node application container could connect to mongodb container only when I used --link before app. Meaning below command works
+
+```bash
+docker run --link my-mongodb --name whisper samrullo/node-whisper
+```
+
+But below doesn't
+
+```bash
+docker run samrullo/node-whisper --link my-mongodb --name whisper
+```
+
+- 

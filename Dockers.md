@@ -70,6 +70,12 @@ To stop the container
 docker stop <container id>
 ```
 
+To connect to a container and run commands
+
+```
+docker exec -it <container name> bash
+```
+
 ## Layered filesystem
 
 Docker image consists of layers of filesystems. Image layers are read only. We can launch multiple containers from the same image. Images can share layers among each other as well.

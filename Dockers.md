@@ -421,7 +421,22 @@ If you want to stop services, and remove containers, images and volumes
 ```bash
 docker-compose down --rmi all --volumes
 ```
+# Create image from running container
 
+- Image from container_name
+  ```bash
+  docker commit <container_name>
+  ```
+
+- Tag docker image
+  ```bash
+  docker tag <image_id>
+  ```
+
+- To remove a tag from an image, simply use ```docker rmi``` and specify image repository
+  ```
+  docker rmi <image repository name>:<image tag>
+  ```
 
 
 # Some issues
@@ -438,5 +453,3 @@ But below doesn't
 ```bash
 docker run samrullo/node-whisper --link my-mongodb --name whisper
 ```
-
-- 

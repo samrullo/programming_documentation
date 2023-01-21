@@ -56,3 +56,11 @@ To make certain python version global
 ```
 pyenv global 3.10.4
 ```
+<<<<<<< HEAD
+=======
+
+# Appendix
+
+Ubuntu 22.04 (to check your ubuntu version you can `cat /etc/issue`)
+doesn't contain python-openssl package but rather `python3-openssl`
+>>>>>>> b5d83d3b6c769d8e474f14d31a46ffec89b39707

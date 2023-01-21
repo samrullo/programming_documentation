@@ -30,6 +30,7 @@ psql -h host -d database -U user -W
 CREATE DATABASE <new db>
 ```
 
+<<<<<<< HEAD
 If above method doesn't work, use following
 Open your cmd.exe or powershell and navigate to psql bin folder such as **C:\Program Files\PostgreSQL\14\bin**
 
@@ -41,6 +42,8 @@ createdb -U postgres bsiuzbekistanjapan
 
 You should user like ```postgres``` in above command that has perms to create databases.
 
+=======
+>>>>>>> b5d83d3b6c769d8e474f14d31a46ffec89b39707
 ## List tables
 
 ```

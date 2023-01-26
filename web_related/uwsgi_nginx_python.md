@@ -54,7 +54,7 @@ Then we can start *uWSGI* server as below
 (venv)$ uwsgi --socket 0.0.0.0:80 --protocol=http -w <name of python script that has application callable>
 ```
 
-But to have *nginx* server our python web application, we have to set up a *system service* that 
+But to have *nginx* serve our python web application, we have to set up a *system service* that 
 starts at the boot and also triggers *uWSGI* server to listen on a socket based on *.ini* file
 
 For instance we can define *ini* file as below

@@ -22,6 +22,16 @@ This will install
 - pyenv-doctor: Plugin to verify that pyenv and build dependencies are installed
 - pyenv-which-ext: Plugin to automatically lookup system commands
 
+Finally add below kind of files to your ```~/.bashrc``` file to add *pyenv* to PATH
+
+```
+export PYENV_ROOT="$HOME/.pyenv"
+command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
+```
+
+Also alias ```pyenv``` to ```/root/.pyenv/bin/pyenv``` if you are trying to run this in docker
+
 # Install python versions with pyenv
 
 There are many versions of python to choose from

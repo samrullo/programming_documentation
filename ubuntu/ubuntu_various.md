@@ -29,3 +29,26 @@ White: [\033[37m]
 Don't forget to reset the color back to default by \[\033[00m\] after you set the color you want.
 
 Make sure to save the changes and either logout/login or use the command source ~/.bashrc or source ~/.zshrc to apply the changes.
+
+## to show only part of current working directory and colorize it
+
+Below example shows last two parts of current working directory
+
+```
+PS1='\[\033[32m\]\u\[\033[00m\]@\[\033[33m\]\h\[\033[00m\]:\[\033[34m\]$(pwd | sed "s:.*/\(.*/[^/]*\).*:\1:")\[\033[00m\]\$'
+```
+
+
+```\(.*/[^/]*\)``` means
+
+This is a regular expression that matches a specific pattern in a string. The expression matches:
+
+- ".*/" which matches any characters (including zero or more characters) followed by a "/"
+- "[^/]*" which matches any number of non-slash characters.
+
+The whole expression is captured as a group by paranthese (opening and closing paranthesis escaped)
+so that it can be referenced later in the substitution operation.
+In this regular expression, the "." character matches any character (except a newline character), the "*" character means "zero or more occurrences", the "[^/]" means "any character except a slash", and the opening and closing parantheses characters indicate a capturing group.
+
+
+
